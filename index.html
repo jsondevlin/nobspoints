@@ -88,6 +88,8 @@
       color: #00ff66;
       font-size: 0.8rem;
       flex-shrink: 0;
+      background-size: cover;
+      background-position: center;
     }
 
     .points {
@@ -142,7 +144,7 @@
 <body>
   <h1>> AVAX Nobs Points Tracker<span class="terminal-blink"></span></h1>
 
-  <input type="text" id="search" placeholder="Search handles...">
+  <input type="text" id="search" placeholder="Search handles..." aria-label="Search leaderboard">
 
   <table id="leaderboard">
     <thead>
@@ -216,42 +218,70 @@ const data = [
   {"username": "0xUKNW", "total_points": 10}
 ];
 
-    const leaderboard = data
-      .map(d => ({ ...d, adjusted_points: d.total_points / 10 }))
-      .sort((a, b) => b.adjusted_points - a.adjusted_points);
+const leaderboard = data
+  .map(d => ({ ...d, adjusted_points: d.total_points / 10 }))
+  .sort((a, b) => b.adjusted_points - a.adjusted_points);
 
-    const tbody = document.querySelector("#leaderboard tbody");
-    const searchInput = document.querySelector("#search");
+const tbody = document.querySelector("#leaderboard tbody");
+const searchInput = document.querySelector("#search");
 
-    function renderTable(filter = "") {
-      tbody.innerHTML = "";
-      leaderboard
-        .filter(item => item.username.toLowerCase().includes(filter.toLowerCase()))
-        .forEach((item, index) => {
-          const initials = item.username.slice(0, 2).toUpperCase();
-          const avatarUrl = `https://unavatar.io/twitter/${item.username}`;
-          const twitterUrl = `https://twitter.com/${item.username}`;
-          const displayPoints = item.adjusted_points.toLocaleString(undefined, { maximumFractionDigits: 0 });
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td class="rank">${index + 1}</td>
-            <td class="username">
-              <div class="avatar" style="background-image: url('${avatarUrl}'); background-size: cover;"
-                   onerror="this.style.backgroundImage='none'; this.textContent='${initials}'"></div>
-              <a href="${twitterUrl}" target="_blank">@${item.username}</a>
-              <div class="popup">Open Twitter → @${item.username}</div>
-            </td>
-            <td class="points">${displayPoints}</td>
-          `;
-          tbody.appendChild(row);
-        });
-    }
+function renderTable(filter = "") {
+  tbody.innerHTML = "";
+  leaderboard
+    .filter(item => item.username.toLowerCase().includes(filter.toLowerCase()))
+    .forEach((item, index) => {
+      const initials = item.username.slice(0, 2).toUpperCase();
+      const twitterUrl = `https://twitter.com/${item.username}`;
+      const displayPoints = item.adjusted_points.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
-    renderTable();
+      const row = document.createElement("tr");
 
-    searchInput.addEventListener("input", e => {
-      renderTable(e.target.value);
+      const rankCell = document.createElement("td");
+      rankCell.className = "rank";
+      rankCell.textContent = index + 1;
+
+      const usernameCell = document.createElement("td");
+      usernameCell.className = "username";
+
+      const avatarDiv = document.createElement("div");
+      avatarDiv.className = "avatar";
+      avatarDiv.textContent = initials;
+
+      const img = new Image();
+      img.src = `https://unavatar.io/twitter/${item.username}`;
+      img.onload = () => avatarDiv.style.backgroundImage = `url(${img.src})`;
+      img.onerror = () => avatarDiv.style.backgroundImage = "none";
+
+      const link = document.createElement("a");
+      link.href = twitterUrl;
+      link.target = "_blank";
+      link.textContent = `@${item.username}`;
+
+      const popup = document.createElement("div");
+      popup.className = "popup";
+      popup.textContent = `Open Twitter → @${item.username}`;
+
+      usernameCell.appendChild(avatarDiv);
+      usernameCell.appendChild(link);
+      usernameCell.appendChild(popup);
+
+      const pointsCell = document.createElement("td");
+      pointsCell.className = "points";
+      pointsCell.textContent = displayPoints;
+
+      row.appendChild(rankCell);
+      row.appendChild(usernameCell);
+      row.appendChild(pointsCell);
+
+      tbody.appendChild(row);
     });
+}
+
+renderTable();
+
+searchInput.addEventListener("input", e => {
+  renderTable(e.target.value);
+});
   </script>
 </body>
 </html>

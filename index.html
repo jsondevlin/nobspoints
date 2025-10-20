@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AVAX Nobs Points Tracker</title>
   <style>
     body {
@@ -17,8 +17,27 @@
       text-align: center;
       color: #00ff66;
       font-size: 2em;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       text-shadow: 0 0 10px #00ff66;
+    }
+
+    #search {
+      display: block;
+      margin: 0 auto 30px;
+      padding: 8px 12px;
+      font-size: 1rem;
+      font-family: "Courier New", monospace;
+      border: 1px solid #00ff66;
+      border-radius: 6px;
+      background-color: #001900;
+      color: #00ff66;
+      width: 90%;
+      max-width: 400px;
+      outline: none;
+    }
+
+    #search::placeholder {
+      color: #00aa55;
     }
 
     table {
@@ -68,6 +87,7 @@
       justify-content: center;
       color: #00ff66;
       font-size: 0.8rem;
+      flex-shrink: 0;
     }
 
     .points {
@@ -122,6 +142,8 @@
 <body>
   <h1>> AVAX Nobs Points Tracker<span class="terminal-blink"></span></h1>
 
+  <input type="text" id="search" placeholder="Search handles...">
+
   <table id="leaderboard">
     <thead>
       <tr>
@@ -135,62 +157,76 @@
 
   <script>
     const data = [
-      {"username": "goldsmols", "total_points": 1609468.8101522783},
-      {"username": "BenAFFLEGG", "total_points": 1121828.3898909907},
-      {"username": "smolshidder", "total_points": 670520.3414120768},
-      {"username": "StrongGalt", "total_points": 524645.5551082715},
-      {"username": "pythonomics", "total_points": 496128.8640336193},
-      {"username": "JustnThePhotog", "total_points": 433690.9134958425},
-      {"username": "cryptoguy559", "total_points": 433041.85721976485},
-      {"username": "ChopperSats", "total_points": 424469.29236007895},
-      {"username": "Mr_Mislothelees", "total_points": 403051.7610554536},
-      {"username": "AMURLOC70658", "total_points": 385554.8110176861},
-      {"username": "briischamp", "total_points": 382654.579485881},
-      {"username": "AlexPancakesNFT", "total_points": 367519.09631274693},
-      {"username": "0xAccess", "total_points": 323211.43859499844},
-      {"username": "roti_dao", "total_points": 309275.64387491136},
-      {"username": "iamaboffin", "total_points": 264770.96420274605},
-      {"username": "_7_Principles", "total_points": 247807.91380267037},
-      {"username": "CryptoGuy_777", "total_points": 213606.86868709812},
-      {"username": "JrgenDeutschma1", "total_points": 206187.82262753995},
-      {"username": "DanoManoNFT", "total_points": 189931.74126471006},
-      {"username": "___Brainiac", "total_points": 174231.72681668293},
-      {"username": "Ace0fTrades", "total_points": 161078.42307480756},
-      {"username": "quietednights", "total_points": 154545.46876273843},
-      {"username": "dukvik1", "total_points": 152115.33769026498},
-      {"username": "vade2d051", "total_points": 149915.70130886},
-      {"username": "ohhhhhYeeah", "total_points": 148926.51785021732},
-      {"username": "DJ_RUSTBUCKET", "total_points": 145068.0253347529},
-      {"username": "stogchog", "total_points": 144010.73301683975},
-      {"username": "time2domoney", "total_points": 140971.70749968587},
-      {"username": "nonamejames333", "total_points": 137817.15537991966},
-      {"username": "Shwaver", "total_points": 134787.771999212}
+      {"username": "excelballer", "total_points": 1000009.8101522783},
+      {"username": "nobsfud", "total_points": 1000001.8101522783},
+      {"username": "0xNeothon", "total_points": 112182.8101522783},
+      {"username": "goldsmols", "total_points": 160946.8101522783},
+      {"username": "BenAFFLEGG", "total_points": 112182.3898909907},
+      {"username": "smolshidder", "total_points": 67052.3414120768},
+      {"username": "StrongGalt", "total_points": 52464.5551082715},
+      {"username": "pythonomics", "total_points": 49612.8640336193},
+      {"username": "prettyjson", "total_points": 43369.9134958425},
+      {"username": "cryptoguy559", "total_points": 43304.85721976485},
+      {"username": "ChopperSats", "total_points": 42446.29236007895},
+      {"username": "Mr_Mislothelees", "total_points": 40305.7610554536},
+      {"username": "AMURLOC70658", "total_points": 38555.8110176861},
+      {"username": "briischamp", "total_points": 38265.579485881},
+      {"username": "AlexPancakesNFT", "total_points": 36751.09631274693},
+      {"username": "0xAccess", "total_points": 32321.43859499844},
+      {"username": "roti_dao", "total_points": 30927.64387491136},
+      {"username": "iamaboffin", "total_points": 26477.96420274605},
+      {"username": "_7_Principles", "total_points": 24780.91380267037},
+      {"username": "CryptoGuy_777", "total_points": 21360.86868709812},
+      {"username": "JrgenDeutschma1", "total_points": 20618.82262753995},
+      {"username": "DanoManoNFT", "total_points": 18993.74126471006},
+      {"username": "___Brainiac", "total_points": 17423.72681668293},
+      {"username": "Ace0fTrades", "total_points": 16107.42307480756},
+      {"username": "quietednights", "total_points": 15454.46876273843},
+      {"username": "dukvik1", "total_points": 15211.33769026498},
+      {"username": "vade2d051", "total_points": 14991.70130886},
+      {"username": "ohhhhhYeeah", "total_points": 14892.51785021732},
+      {"username": "DJ_RUSTBUCKET", "total_points": 14506.0253347529},
+      {"username": "stogchog", "total_points": 14401.73301683975},
+      {"username": "time2domoney", "total_points": 14097.70749968587},
+      {"username": "nonamejames333", "total_points": 13781.15537991966},
+      {"username": "Shwaver", "total_points": 13478.771999212}
     ];
 
-    // Sort leaderboard
     const leaderboard = data
       .map(d => ({ ...d, adjusted_points: d.total_points / 10 }))
       .sort((a, b) => b.adjusted_points - a.adjusted_points);
 
     const tbody = document.querySelector("#leaderboard tbody");
+    const searchInput = document.querySelector("#search");
 
-    leaderboard.forEach((item, index) => {
-      const initials = item.username.slice(0, 2).toUpperCase();
-      const avatarUrl = `https://unavatar.io/twitter/${item.username}`;
-      const twitterUrl = `https://twitter.com/${item.username}`;
-      const displayPoints = item.adjusted_points.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    function renderTable(filter = "") {
+      tbody.innerHTML = "";
+      leaderboard
+        .filter(item => item.username.toLowerCase().includes(filter.toLowerCase()))
+        .forEach((item, index) => {
+          const initials = item.username.slice(0, 2).toUpperCase();
+          const avatarUrl = `https://unavatar.io/twitter/${item.username}`;
+          const twitterUrl = `https://twitter.com/${item.username}`;
+          const displayPoints = item.adjusted_points.toLocaleString(undefined, { maximumFractionDigits: 0 });
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="rank">${index + 1}</td>
+            <td class="username">
+              <div class="avatar" style="background-image: url('${avatarUrl}'); background-size: cover;"
+                   onerror="this.style.backgroundImage='none'; this.textContent='${initials}'"></div>
+              <a href="${twitterUrl}" target="_blank">@${item.username}</a>
+              <div class="popup">Open Twitter → @${item.username}</div>
+            </td>
+            <td class="points">${displayPoints}</td>
+          `;
+          tbody.appendChild(row);
+        });
+    }
 
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td class="rank">${index + 1}</td>
-        <td class="username">
-          <div class="avatar" style="background-image: url('${avatarUrl}'); background-size: cover;" onerror="this.style.backgroundImage='none'; this.textContent='${initials}'"></div>
-          <a href="${twitterUrl}" target="_blank">@${item.username}</a>
-          <div class="popup">Open Twitter → @${item.username}</div>
-        </td>
-        <td class="points">${displayPoints}</td>
-      `;
-      tbody.appendChild(row);
+    renderTable();
+
+    searchInput.addEventListener("input", e => {
+      renderTable(e.target.value);
     });
   </script>
 </body>

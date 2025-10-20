@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AVAX Nobs Points Tracker</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #00ff66;
+      font-family: "Courier New", monospace;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00ff66;
+      font-size: 2em;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #00ff66;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #00ff66;
+      text-align: left;
+    }
+
+    th {
+      color: #00ffaa;
+      font-weight: bold;
+      border-bottom: 2px solid #00ffaa;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 255, 100, 0.1);
+    }
+
+    .rank {
+      width: 60px;
+      color: #00ffaa;
+    }
+
+    .username {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #00ff99;
+      font-weight: bold;
+      position: relative;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #00ff66;
+      background-color: rgba(0,255,102,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00ff66;
+      font-size: 0.8rem;
+    }
+
+    .points {
+      color: #00ffcc;
+      text-align: right;
+    }
+
+    .username a {
+      color: #00ff99;
+      text-decoration: none;
+    }
+
+    .username a:hover {
+      text-decoration: underline;
+      color: #00ffaa;
+    }
+
+    .popup {
+      display: none;
+      position: absolute;
+      left: 50px;
+      top: 5px;
+      background-color: #001900;
+      border: 1px solid #00ff66;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      z-index: 10;
+      border-radius: 6px;
+      box-shadow: 0 0 10px #00ff66;
+    }
+
+    .username:hover .popup {
+      display: block;
+    }
+
+    .terminal-blink::after {
+      content: "█";
+      animation: blink 1s infinite;
+      color: #00ff66;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @media (max-width: 600px) {
+      th, td { font-size: 0.8rem; padding: 6px; }
+      .avatar { width: 24px; height: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>> AVAX Nobs Points Tracker<span class="terminal-blink"></span></h1>
+
+  <table id="leaderboard">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Handle</th>
+        <th>Points</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const data = [
+      {"username": "goldsmols", "total_points": 1609468.8101522783},
+      {"username": "BenAFFLEGG", "total_points": 1121828.3898909907},
+      {"username": "smolshidder", "total_points": 670520.3414120768},
+      {"username": "StrongGalt", "total_points": 524645.5551082715},
+      {"username": "pythonomics", "total_points": 496128.8640336193},
+      {"username": "JustnThePhotog", "total_points": 433690.9134958425},
+      {"username": "cryptoguy559", "total_points": 433041.85721976485},
+      {"username": "ChopperSats", "total_points": 424469.29236007895},
+      {"username": "Mr_Mislothelees", "total_points": 403051.7610554536},
+      {"username": "AMURLOC70658", "total_points": 385554.8110176861},
+      {"username": "briischamp", "total_points": 382654.579485881},
+      {"username": "AlexPancakesNFT", "total_points": 367519.09631274693},
+      {"username": "0xAccess", "total_points": 323211.43859499844},
+      {"username": "roti_dao", "total_points": 309275.64387491136},
+      {"username": "iamaboffin", "total_points": 264770.96420274605},
+      {"username": "_7_Principles", "total_points": 247807.91380267037},
+      {"username": "CryptoGuy_777", "total_points": 213606.86868709812},
+      {"username": "JrgenDeutschma1", "total_points": 206187.82262753995},
+      {"username": "DanoManoNFT", "total_points": 189931.74126471006},
+      {"username": "___Brainiac", "total_points": 174231.72681668293},
+      {"username": "Ace0fTrades", "total_points": 161078.42307480756},
+      {"username": "quietednights", "total_points": 154545.46876273843},
+      {"username": "dukvik1", "total_points": 152115.33769026498},
+      {"username": "vade2d051", "total_points": 149915.70130886},
+      {"username": "ohhhhhYeeah", "total_points": 148926.51785021732},
+      {"username": "DJ_RUSTBUCKET", "total_points": 145068.0253347529},
+      {"username": "stogchog", "total_points": 144010.73301683975},
+      {"username": "time2domoney", "total_points": 140971.70749968587},
+      {"username": "nonamejames333", "total_points": 137817.15537991966},
+      {"username": "Shwaver", "total_points": 134787.771999212}
+    ];
+
+    // Sort leaderboard
+    const leaderboard = data
+      .map(d => ({ ...d, adjusted_points: d.total_points / 10 }))
+      .sort((a, b) => b.adjusted_points - a.adjusted_points);
+
+    const tbody = document.querySelector("#leaderboard tbody");
+
+    leaderboard.forEach((item, index) => {
+      const initials = item.username.slice(0, 2).toUpperCase();
+      const avatarUrl = `https://unavatar.io/twitter/${item.username}`;
+      const twitterUrl = `https://twitter.com/${item.username}`;
+      const displayPoints = item.adjusted_points.toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="rank">${index + 1}</td>
+        <td class="username">
+          <div class="avatar" style="background-image: url('${avatarUrl}'); background-size: cover;" onerror="this.style.backgroundImage='none'; this.textContent='${initials}'"></div>
+          <a href="${twitterUrl}" target="_blank">@${item.username}</a>
+          <div class="popup">Open Twitter → @${item.username}</div>
+        </td>
+        <td class="points">${displayPoints}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  </script>
+</body>
+</html>

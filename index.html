@@ -82,14 +82,9 @@
       border-radius: 50%;
       border: 1px solid #00ff66;
       background-color: rgba(0,255,102,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #00ff66;
-      font-size: 0.8rem;
-      flex-shrink: 0;
       background-size: cover;
       background-position: center;
+      flex-shrink: 0;
     }
 
     .points {
@@ -230,7 +225,6 @@ function renderTable(filter = "") {
   leaderboard
     .filter(item => item.username.toLowerCase().includes(filter.toLowerCase()))
     .forEach((item, index) => {
-      const initials = item.username.slice(0, 2).toUpperCase();
       const twitterUrl = `https://twitter.com/${item.username}`;
       const displayPoints = item.adjusted_points.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
@@ -245,7 +239,6 @@ function renderTable(filter = "") {
 
       const avatarDiv = document.createElement("div");
       avatarDiv.className = "avatar";
-      avatarDiv.textContent = initials;
 
       const img = new Image();
       img.src = `https://unavatar.io/twitter/${item.username}`;
